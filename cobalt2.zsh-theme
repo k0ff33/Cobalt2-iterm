@@ -37,7 +37,7 @@ prompt_end() {
   else
     echo -n "%{%k%}"
   fi
-  echo -n "%{%f%}"
+  echo -n "\e[m\n➤%{%f%}"
   CURRENT_BG=''
 }
 
@@ -49,7 +49,7 @@ prompt_context() {
   local user=`whoami`
 
   if [[ "$user" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    prompt_segment black default "%(!.%{%F{yellow}%}.)✝"
+    prompt_segment black default "%(!.%{%F{yellow}%}.)⚡"
   fi
 }
 
@@ -75,6 +75,14 @@ prompt_dir() {
   # prompt_segment blue black "…${PWD: -30}"
 }
 
+# Node:
+# - Display Node version in use
+prompt_node() {
+  if which node &> /dev/null; then
+    prompt_segment black green "⬢ $(node -v)"
+  fi
+}
+
 # Status:
 # - was there an error
 # - am I root
@@ -96,6 +104,7 @@ build_prompt() {
   prompt_context
   prompt_dir
   prompt_git
+  prompt_node
   prompt_end
 }
 
